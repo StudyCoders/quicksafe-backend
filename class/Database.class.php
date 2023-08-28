@@ -60,7 +60,8 @@ class db
 
     public function error($error)
     {
-        echo $error;
+        http_response_code(500);
+        die(json_encode(array("error" => $error )));
     }
 
     public function fetch($query, $parameters = array())

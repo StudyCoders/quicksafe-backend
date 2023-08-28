@@ -9,17 +9,13 @@ $email = $dados->email;
 $cpf = $dados->cpf;
 $senha = password_hash($dados->senha, PASSWORD_BCRYPT);
 
-try{
-    $sql = "INSERT INTO USUARIO(NOME_COMPLETO, EMAIL, CPF, SENHA)
-                VALUES
-            (?, ?, ?, ?)";
-    $values = array($nome_completo, $email, $cpf, $senha);
+$sql = "INSERT INTO USUARIO(NOME_COMPLETO, EMAIL, CPF, SENHA)
+    VALUES
+    (?, ?, ?, ?)";
 
-    $con->insert($sql, $values);
+$values = array($nome_completo, $email, $cpf, $senha);
 
-    die(json_encode(array("msg"=>"Usuario salvo com sucesso")));
+$stmt = $con->insert($sql, $values);
 
-}catch(Exception $e){
-    die(json_encode(array("error"=>"Erro ao salvar usuario" . $e->getMessage() )));
-}
+die(json_encode(array("msg" => "Usuario salvo com sucesso")));
 ?>
