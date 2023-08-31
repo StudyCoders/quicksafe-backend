@@ -1,4 +1,4 @@
-# Backend do Projeto QuickSafe: "Localização em Tempo Real para Situações de Perigo"
+# Backend do Projeto QuickSafe: "Compartilhe Sua Localização em Casos de Emergência"
 
 ## Introdução
 
