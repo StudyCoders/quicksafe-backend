@@ -4,18 +4,25 @@ include_once("../includes/conexao.php");
 $retorno = file_get_contents('php://input');
 $dados = json_decode($retorno);
 
-$nome_completo = $dados->nome_completo;
+$nome_completo = strtoupper($dados->nome_completo);
 $email = $dados->email;
-$cpf = $dados->cpf;
+$cpf = preg_replace('/\D/', '', $dados->cpf);
 $senha = password_hash($dados->senha, PASSWORD_BCRYPT);
 
-$sql = "INSERT INTO USUARIO(NOME_COMPLETO, EMAIL, CPF, SENHA)
-    VALUES
-    (?, ?, ?, ?)";
+$sql = "SELECT * FROM USUARIO WHERE EMAIL = ?";
+$values = array($email);
+$count = $con->count($sql, $values);
 
-$values = array($nome_completo, $email, $cpf, $senha);
+if($count === 0){
+    $sql = "INSERT INTO USUARIO(NOME_COMPLETO, EMAIL, CPF, SENHA)
+                VALUES
+            (?, ?, ?, ?)";
+    $values = array($nome_completo, $email, $cpf, $senha);
 
-$stmt = $con->insert($sql, $values);
+    $stmt = $con->insert($sql, $values);
 
-die(json_encode(array("msg" => "Usuario salvo com sucesso")));
+    die(json_encode(array("msg" => "Usuario salvo com sucesso")));
+}else{
+    retorna_erro("E-mail já existente", 501);
+}
 ?>
