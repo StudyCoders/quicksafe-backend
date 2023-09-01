@@ -6,3 +6,5 @@ $CFG_PROD = array(
     "password" => "password",
     "database" => "projects"
 );
+
+$API_SECRET = "chave_api";
