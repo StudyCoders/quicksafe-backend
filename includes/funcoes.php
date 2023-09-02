@@ -37,3 +37,28 @@ function getBearerToken()
 	}
 	return null;
 }
+
+function gerarHashToken($token) {
+	return hash('sha256',$token);
+}
+
+function bloquearToken($con, $token)
+{
+	$hashedToken = gerarHashToken($token);
+	$con->insert("INSERT INTO TOKENS_BLOQUEADOS(TOKEN_HASH) VALUES (?)", array($hashedToken));
+}
+
+function verificarTokenBloqueado($con, $token)
+{
+	$hashedToken = gerarHashToken($token);
+	$query = "SELECT TOKEN_HASH FROM TOKENS_BLOQUEADOS WHERE TOKEN_HASH = ?";
+	$totalLinhas = $con->count($query, array($hashedToken));
+
+	if ($totalLinhas > 0) {
+		// O token está na lista de bloqueio
+		return true;
+	} else {
+		// O token não está na lista de bloqueio
+		return false;
+	}
+}

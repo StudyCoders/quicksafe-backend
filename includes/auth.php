@@ -20,6 +20,10 @@ try {
     if (!$jwtToken) {
         retorna_erro("Chave não informada!", 403);
     }
+    
+    if ( verificarTokenBloqueado($con, $jwtToken) ) {
+        retorna_erro("O token fornecido não é mais válido devido ao encerramento da sessão.", 403);
+    }
 
     /* Faz a validação da chave */
     $decoded = FirebaseJWT::decode($jwtToken, new FirebaseKey($API_SECRET, 'HS256'));

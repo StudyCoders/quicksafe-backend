@@ -28,6 +28,10 @@ if($count > 0){
     $data = $con->fetch($sql, $values);
     $email_banco = $data['EMAIL'];
     $senha_banco = $data['SENHA'];
+    // Data que o token foi criado
+    $issuedAt = time();
+    // jwt válido para 30 dias (60 segundos * 60 minutos * 24 horas * 30 dias)
+    $expirationTime = $issuedAt + 60 * 60 * 24 * 30;
 
     if(password_verify($senha, $senha_banco)){
         $id_usuario = $data['ID_USUARIO'];
@@ -37,7 +41,9 @@ if($count > 0){
         $payload = [
             'id_usuario' => $id_usuario,
             'email' => $email,
-            'nome' => $nome
+            'nome' => $nome,
+            'iat' => $issuedAt,
+            'exp' => $expirationTime
         ];
                 
         $jwt = FirebaseJWT::encode($payload, $API_SECRET, 'HS256');
