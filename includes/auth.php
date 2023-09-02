@@ -22,7 +22,7 @@ try {
     }
     
     if ( verificarTokenBloqueado($con, $jwtToken) ) {
-        retorna_erro("O token fornecido não é mais válido devido ao encerramento da sessão.", 403);
+        retorna_erro("O token fornecido não é mais válido devido ao encerramento da sessão.", 401);
     }
 
     /* Faz a validação da chave */

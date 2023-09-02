@@ -50,7 +50,7 @@ if($count > 0){
 
         die(json_encode(array("msg" => "Entrando no aplicativo!", "token" =>  $jwt )));
     }else{
-        retorna_erro("Senha incorreta", 403);
+        retorna_erro("Senha incorreta", 401);
     }
 
 }else{
