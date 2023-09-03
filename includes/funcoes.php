@@ -37,3 +37,12 @@ function getBearerToken()
 	}
 	return null;
 }
+
+function verifica_propriedades($dados, $propriedades){
+	foreach($propriedades as $prop){
+		if(!property_exists($dados, $prop)){
+			return false;
+		}
+	}
+	return true;
+}

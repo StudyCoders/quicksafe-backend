@@ -1,5 +1,5 @@
 <?php
-include_once("../includes/conexao.php");
+include_once("conexao.php");
 include_once("../class/php-jwt/src/JWT.php");
 include_once("../class/php-jwt/src/Key.php");
 include_once("../class/php-jwt/src/SignatureInvalidException.php");

@@ -11,8 +11,9 @@ if (empty($retorno)) {
 }
 
 $dados = json_decode($retorno);
+$propriedades = array("email", "senha");
 
-if (property_exists($dados, "email") && property_exists($dados, "senha")) {
+if (verifica_propriedades($dados, $propriedades)) {
     $email = $dados->email;
     $senha = $dados->senha;
 } else {
