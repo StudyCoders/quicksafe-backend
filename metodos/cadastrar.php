@@ -10,7 +10,7 @@ if (empty($retorno)) {
 $dados = json_decode($retorno);
 $propriedades = array("nome_completo", "email", "cpf", "senha");
 
-if (verifica_propriedades($dados, $propriedades)) {
+if (verificarPropriedades($dados, $propriedades)) {
     $nome_completo = strtoupper($dados->nome_completo);
     $email = $dados->email;
     $cpf = preg_replace('/\D/', '', $dados->cpf);

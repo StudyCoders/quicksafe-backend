@@ -9,23 +9,23 @@ if (empty($retorno)) {
 
 $dados = json_decode($retorno);
 
-if(property_exists($dados, "id_formulario"))
+if(!empty($dados->id_formulario))
     $id_formulario = $dados->id_formulario;
 
-$id_usuario = $dados->id_usuario;
+$id_usuario = $decoded_array['id_usuario'];
 $id_contato = $dados->id_contato;
 
 $verifca_contato = !empty($id_contato) ? " AND ID_CONTATO = ?" : "";
 
 $values_formulario = array(
-    $cep = $dados->cep,
+    $cep = preg_replace('/\D/', '', $dados->cep),
     $endereco = $dados->endereco,
     $bairro = $dados->bairro,
     $complemento = $dados->complemento,
     $id_cidade = $dados->id_cidade,
-    $telefone = $dados->telefone,
-    $celular = $dados->celular,
-    $dt_nascimento = $dados->dt_nascimento,
+    $telefone = preg_replace('/\D/', '', $dados->telefone),
+    $celular = preg_replace('/\D/', '', $dados->celular),
+    $dt_nascimento = transformarData($dados->dt_nascimento),
     $tp_sexo = $dados->tp_sexo,
     $id_plano = $dados->id_plano,
     $ds_plano = $dados->ds_plano,

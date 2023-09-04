@@ -13,7 +13,7 @@ if (empty($retorno)) {
 $dados = json_decode($retorno);
 $propriedades = array("email", "senha");
 
-if (verifica_propriedades($dados, $propriedades)) {
+if (verificarPropriedades($dados, $propriedades)) {
     $email = $dados->email;
     $senha = $dados->senha;
 } else {

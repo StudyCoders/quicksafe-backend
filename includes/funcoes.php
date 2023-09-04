@@ -63,11 +63,21 @@ function verificarTokenBloqueado($con, $token)
 	}
 }
 
-function verifica_propriedades($dados, $propriedades){
+function verificarPropriedades($dados, $propriedades){
 	foreach($propriedades as $prop){
 		if(!property_exists($dados, $prop)){
 			return false;
 		}
 	}
 	return true;
+}
+
+function transformarData($data) {
+    // Divide a data em dia, mês e ano
+    list($dia, $mes, $ano) = explode('/', $data);
+    
+    // Formata a data no novo formato
+    $novaData = "$ano-$mes-$dia";
+    
+    return $novaData;
 }
