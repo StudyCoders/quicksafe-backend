@@ -35,14 +35,30 @@ if($count > 0){
     $expirationTime = $issuedAt + 60 * 60 * 24 * 30;
 
     if(password_verify($senha, $senha_banco)){
+        $existe_form = false;
         $id_usuario = $data['ID_USUARIO'];
         $nome = $data['NOME_COMPLETO'];
         $email = $data['EMAIL'];
 
+        $sql = "SELECT U.*, COUNT(F.ID_FORMULARIO) FORMULARIO
+                    FROM USUARIO U
+                LEFT JOIN FORMULARIO F
+                    ON U.ID_USUARIO = F.ID_USUARIO
+                WHERE U.ID_USUARIO = ?
+                    GROUP BY U.ID_USUARIO";
+        $values = array($id_usuario);
+
+        $count = $con->count($sql, $values);
+
+        if($count > 0){
+            $existe_form = true;
+        }
+        
         $payload = [
             'id_usuario' => $id_usuario,
             'email' => $email,
             'nome' => $nome,
+            'existe_form' => $existe_form,
             'iat' => $issuedAt,
             'exp' => $expirationTime
         ];
