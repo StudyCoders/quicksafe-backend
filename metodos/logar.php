@@ -40,15 +40,9 @@ if($count > 0){
         $nome = $data['NOME_COMPLETO'];
         $email = $data['EMAIL'];
 
-        $sql = "SELECT U.*, COUNT(F.ID_FORMULARIO) FORMULARIO
-                    FROM USUARIO U
-                LEFT JOIN FORMULARIO F
-                    ON U.ID_USUARIO = F.ID_USUARIO
-                WHERE U.ID_USUARIO = ?
-                    GROUP BY U.ID_USUARIO";
-        $values = array($id_usuario);
+        $sql = "SELECT * FROM FORMULARIO AS F WHERE F.ID_USUARIO = ?";
 
-        $count = $con->count($sql, $values);
+        $count = $con->count($sql, array($id_usuario));
 
         if($count > 0){
             $existe_form = true;
