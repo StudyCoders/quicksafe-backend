@@ -1,21 +1,17 @@
 <?php
 include_once("../includes/auth.php");
 
-$acao = $_GET["acao"];
 $retorno = array();
 
-if($acao == "cidade") {
-    $sql = "SELECT * FROM CIDADE ORDER BY ID_CIDADE";
-    $retorno = $con->fetchAll($sql);
+$queries = array(
+    "cidade" => "SELECT C.ID_CIDADE AS value, C.NOME_CIDADE AS label FROM CIDADE C ORDER BY ID_CIDADE",
+    "comorbidade" => "SELECT C.ID_COMORBIDADE AS value, C.NOME_COMORBIDADE AS label FROM COMORBIDADE C ORDER BY ID_COMORBIDADE",
+    "planoSaude" => "SELECT P.ID_PLANO AS value, P.NOME_PLANO AS label FROM PLANO_SAUDE P ORDER BY ID_PLANO"
+);
 
-} else if($acao == "comorbidade") {
-    $sql = "SELECT * FROM COMORBIDADE ORDER BY ID_COMORBIDADE";
-    $retorno = $con->fetchAll($sql);
-
-} else if($acao == "plano") {
-    $sql = "SELECT * FROM PLANO_SAUDE ORDER BY ID_PLANO";
-    $retorno = $con->fetchAll($sql);
-
+foreach ($queries as $key => $query) {
+    $rs = $con->fetchAll($query);
+    $retorno[$key] = $rs;
 }
 
 die(json_encode($retorno));
