@@ -39,6 +39,7 @@ if($count > 0){
         $id_usuario = $data['ID_USUARIO'];
         $nome = $data['NOME_COMPLETO'];
         $email = $data['EMAIL'];
+        $cpf = maskCpf($data['CPF']);
 
         $sql = "SELECT * FROM FORMULARIO AS F WHERE F.ID_USUARIO = ?";
 
@@ -52,6 +53,7 @@ if($count > 0){
             'id_usuario' => $id_usuario,
             'email' => $email,
             'nome' => $nome,
+            'cpf'  => $cpf,
             'existe_form' => $existe_form,
             'iat' => $issuedAt,
             'exp' => $expirationTime

@@ -81,3 +81,7 @@ function transformarData($data) {
     
     return $novaData;
 }
+
+function maskCpf($cpf){
+	return implode('.', str_split(substr($cpf, 0, 9), 3)) . '-' . substr($cpf, 9, 2);
+}
