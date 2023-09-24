@@ -9,8 +9,8 @@ if (empty($retorno)) {
 
 $dados = json_decode($retorno);
 
-if(!empty($dados->id_formulario))
-    $id_formulario = $dados->id_formulario;
+$id_formulario = !empty($dados->id_formulario) ? $dados->id_formulario
+                    : "";
 
 $id_usuario = $decoded_array['id_usuario'];
 $id_contato = $dados->id_contato;
