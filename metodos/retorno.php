@@ -66,7 +66,15 @@ if($acao == "select"){
     $id_usuario = $decoded_array['id_usuario'];
 
     $sql = "SELECT * FROM CONTATOS WHERE ID_USUARIO = ?";
-    $retorno = $con->fetchAll($sql, array($id_usuario));
+    $rs = $con->fetchAll($sql, array($id_usuario));
+
+    foreach ($rs as $key => $value) {
+        $retorno[] = array(
+            "id_contato" => $value['ID_CONTATO'],
+            "tipo_contato" => $value['TIPO_CONTATO'],
+            "cpf" => !empty($value['CPF']) ? maskCpf($value['CPF']) : "CPF não informado"
+        );
+    }
 }
 
 die(json_encode($retorno));
