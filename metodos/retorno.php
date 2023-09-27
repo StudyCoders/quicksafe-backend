@@ -28,7 +28,7 @@ if($acao == "select"){
                 LEFT JOIN CIDADE C 
                     ON F.ID_CIDADE = C.ID_CIDADE
                 LEFT JOIN PLANO_SAUDE P
-                    ON F.ID_PLANO = P.NOME_PLANO
+                    ON F.ID_PLANO = P.ID_PLANO
                 LEFT JOIN COMORBIDADE CM
                     ON F.ID_COMORBIDADE = CM.ID_COMORBIDADE
                     WHERE ID_USUARIO = ?" . $verifca_contato;
