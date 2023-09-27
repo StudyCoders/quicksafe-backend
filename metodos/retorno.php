@@ -24,7 +24,15 @@ if($acao == "select"){
     $id_usuario = $decoded_array['id_usuario'];
     $verifca_contato = !empty($id_contato) ? " AND ID_CONTATO = ?" : "";
 
-    $sql = "SELECT * FROM FORMULARIO WHERE ID_USUARIO = ?" . $verifca_contato;
+    $sql = "SELECT * FROM FORMULARIO F
+                LEFT JOIN CIDADE C 
+                    ON F.ID_CIDADE = C.ID_CIDADE
+                LEFT JOIN PLANO_SAUDE P
+                    ON F.ID_PLANO = P.NOME_PLANO
+                LEFT JOIN COMORBIDADE CM
+                    ON F.ID_COMORBIDADE = CM.ID_COMORBIDADE
+                    WHERE ID_USUARIO = ?" . $verifca_contato;
+
     $values = array($id_usuario);
 
     if(!empty($id_contato))
@@ -49,16 +57,19 @@ if($acao == "select"){
         "bairro" => $rs["BAIRRO"],
         "complemento" => $rs["COMPLEMENTO"],
         "id_cidade" => $rs["ID_CIDADE"],
+        "lbl_cidade" => $rs["NOME_CIDADE"],
         "telefone" => $telefoneFormatado,
         "celular" => $celularFormatado,
         "id_plano" => $rs["ID_PLANO"],
+        "lbl_plano" => $rs["NOME_PLANO"],
         "ds_plano" => $rs["DS_PLANO"],
         "alergia" => $rs["ALERGIA"],
         "ds_alergia" => $rs["DS_ALERGIA"],
         "id_comorbidade" => $rs["ID_COMORBIDADE"],
+        "lbl_comorbidade" => $rs["NOME_COMORBIDADE"],
         "ds_comorbidade" => $rs["DS_COMORBIDADE"],
-        "medicamento_continuo" => $rs["MEDICAMENTO_CONTINUO"],
-        "ds_medicamento_continuo" => $rs["DS_MEDICAMENTO_CONTINUO"],
+        "med_cont" => $rs["MEDICAMENTO_CONTINUO"],
+        "ds_med_cont" => $rs["DS_MEDICAMENTO_CONTINUO"],
         "cirurgia" => $rs["CIRURGIA"],
         "ds_cirurgia" => $rs["DS_CIRURGIA"]
     );
