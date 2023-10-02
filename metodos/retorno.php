@@ -19,7 +19,7 @@ if($acao == "select"){
 } else if($acao == "formulario"){
     $dados = json_decode(file_get_contents('php://input'));
 
-    $id_contato = !empty($dados->id_contato) ? $dados->id_contato : "";
+    $id_contato = !empty($_GET["id_contato"]) ? $_GET["id_contato"] : "";
 
     $id_usuario = $decoded_array['id_usuario'];
     $verifca_contato = !empty($id_contato) ? " AND ID_CONTATO = ?" : "";
