@@ -4,7 +4,7 @@ include_once("../environments/environments.php");
 function retorna_erro($msg, $cod)
 {
 	http_response_code($cod);
-	die(json_encode(array("erro" => $msg)));
+	die(json_encode(array("error" => $msg)));
 }
 
 function getAuthorizationHeader()
