@@ -1,5 +1,5 @@
 <?php
-include_once("../includes/auth.php");
+include_once("../includes/auth.php");   
 
 $retorno = file_get_contents('php://input');
 
@@ -8,14 +8,46 @@ if (empty($retorno)) {
 }
 
 $dados = json_decode($retorno);
-
-$id_formulario = !empty($dados->id_formulario) ? $dados->id_formulario
-                    : "";
-
 $id_usuario = $decoded_array['id_usuario'];
-$id_contato = $dados->id_contato;
+$id_contato = "";
 
-$verifca_contato = !empty($id_contato) ? " AND ID_CONTATO = ?" : "";
+if(!empty($dados->nm_contato)){
+    if (verificarPropriedades($dados, array("nm_contato"))) {
+        $contato_existe = false;
+        $tipo_contato = $dados->nm_contato;
+        $id_usuario = $decoded_array['id_usuario'];
+        $cpf = !empty($dados->cpf) ? preg_replace('/\D/', '', $dados->cpf) : "";
+
+        if(!empty($_GET['id_contato'])){
+            $id_contato = $_GET['id_contato'];
+            $contato_existe = true;
+        }
+    } else {
+        retorna_erro("Informe todas as propriedades necessárias: nm_contato.", 400);
+    }
+
+    if(!$contato_existe) {
+        $sql_count = "SELECT ID_CONTATO FROM CONTATOS";
+        $id_contato = $con->count($sql_count) + 1;
+
+        $sql = "INSERT INTO CONTATOS(ID_CONTATO, TIPO_CONTATO, ID_USUARIO, CPF)
+                    VALUES
+                (?, ?, ?, ?)";
+        $values = array($id_contato, $tipo_contato, $id_usuario, $cpf);
+    
+        $stmt = $con->insert($sql, $values);
+    
+    } else {
+        $sql = "UPDATE CONTATOS SET
+                  TIPO_CONTATO = ?,
+                  CPF = ?
+                WHERE ID_CONTATO = ?
+                  AND ID_USUARIO = ?";
+        $values = array($tipo_contato, $cpf, $id_contato, $id_usuario);
+    
+        $stmt = $con->update($sql, $values);
+    }
+}
 
 $values_formulario = array(
     $cep = preg_replace('/\D/', '', $dados->cep),
@@ -39,8 +71,9 @@ $values_formulario = array(
     $ds_cirurgia = $dados->ds_cirurgia
 );
 
+$verifica_contato = !empty($id_contato) ? " AND ID_CONTATO = ?" : "";
 
-$sql = "SELECT * FROM FORMULARIO WHERE ID_USUARIO = ?" . $verifca_contato;
+$sql = "SELECT * FROM FORMULARIO WHERE ID_USUARIO = ?" . $verifica_contato;
 $values = array($id_usuario);
 
 if(!empty($id_contato))
@@ -81,7 +114,14 @@ if($count === 0){
 
     die(json_encode(array("msg" => "Formulario criado com sucesso")));
 }else{
-    array_push($values_formulario, $id_formulario);
+    array_push($values_formulario, $id_usuario);
+
+    if(!empty($id_contato)){
+        $verifica_contato = " AND ID_CONTATO = ?";
+        array_push($values_formulario, $id_contato);
+    }else{
+        $verifica_contato = " AND ID_CONTATO IS NULL";
+    }
     
     $sql = "UPDATE FORMULARIO SET
                 CEP = ?,
@@ -104,7 +144,8 @@ if($count === 0){
                 CIRURGIA = ?,
                 DS_CIRURGIA = ?
             WHERE
-                ID_FORMULARIO = ?";
+                ID_USUARIO = ?" .
+                $verifica_contato;
     
     $stmt = $con->update($sql, $values_formulario);
 
