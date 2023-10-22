@@ -18,8 +18,8 @@ if(!empty($dados->nm_contato)){
         $id_usuario = $decoded_array['id_usuario'];
         $cpf = !empty($dados->cpf) ? preg_replace('/\D/', '', $dados->cpf) : "";
 
-        if(!empty($_GET['id_contato'])){
-            $id_contato = $_GET['id_contato'];
+        if(!empty($_POST['id_contato'])){
+            $id_contato = $_POST['id_contato'];
             $contato_existe = true;
         }
     } else {
