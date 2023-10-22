@@ -16,7 +16,7 @@ if(!empty($dados->nm_contato)){
         $contato_existe = false;
         $tipo_contato = $dados->nm_contato;
         $id_usuario = $decoded_array['id_usuario'];
-        $cpf = !empty($dados->cpf) ? preg_replace('/\D/', '', $dados->cpf) : "";
+        $cpf = !empty($dados->cpf_contato) ? preg_replace('/\D/', '', $dados->cpf_contato) : "";
 
         if(!empty($_POST['id_contato'])){
             $id_contato = $_POST['id_contato'];
