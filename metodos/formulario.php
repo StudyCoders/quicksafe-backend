@@ -18,8 +18,8 @@ if(!empty($dados->nm_contato)){
         $id_usuario = $decoded_array['id_usuario'];
         $cpf = !empty($dados->cpf_contato) ? preg_replace('/\D/', '', $dados->cpf_contato) : "";
 
-        if(!empty($_POST['id_contato'])){
-            $id_contato = $_POST['id_contato'];
+        if(!empty($dados->id_contato)){
+            $id_contato = $dados->id_contato;
             $contato_existe = true;
         }
     } else {
@@ -46,6 +46,10 @@ if(!empty($dados->nm_contato)){
         $values = array($tipo_contato, $cpf, $id_contato, $id_usuario);
     
         $stmt = $con->update($sql, $values);
+    }
+} else {
+    if ( !empty($dados->id_contato) ) {
+        $id_contato = $dados->id_contato;
     }
 }
 
