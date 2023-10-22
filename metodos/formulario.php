@@ -47,10 +47,6 @@ if(!empty($dados->nm_contato)){
     
         $stmt = $con->update($sql, $values);
     }
-} else {
-    if ( !empty($dados->id_contato) ) {
-        $id_contato = $dados->id_contato;
-    }
 }
 
 $values_formulario = array(
