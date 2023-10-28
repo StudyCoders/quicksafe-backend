@@ -20,7 +20,7 @@ if (verificarPropriedades($dados, $propriedades)) {
     retorna_erro("Informe todas as propriedades necessárias: email e senha.", 400);
 }
 
-$sql = "SELECT * FROM USUARIO WHERE EMAIL = ?"; 
+$sql = "SELECT * FROM USUARIO WHERE EMAIL = ?  AND ATIVO = 'S'"; 
 $values = array($email);
 
 $count = $con->count($sql, $values);

@@ -1,5 +1,5 @@
 <?php
-include_once("../includes/auth.php");   
+include_once("../includes/auth.php");
 
 $retorno = file_get_contents('php://input');
 
@@ -9,7 +9,7 @@ if (empty($retorno)) {
 
 $dados = json_decode($retorno);
 $id_usuario = $decoded_array['id_usuario'];
-$id_contato = "";
+$id_contato = null;
 
 if(!empty($dados->nm_contato)){
     if (verificarPropriedades($dados, array("nm_contato"))) {
