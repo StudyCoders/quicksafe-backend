@@ -22,7 +22,7 @@ if($acao == "select"){
     $id_contato = !empty($_GET["id_contato"]) ? $_GET["id_contato"] : "";
 
     $id_usuario = $decoded_array['id_usuario'];
-    $verifca_contato = !empty($id_contato) ? " AND ID_CONTATO = ?" : "";
+    $verifca_contato = !empty($id_contato) ? " AND F.ID_CONTATO = ?" : "";
 
     $sql = "SELECT * FROM FORMULARIO F
                 LEFT JOIN CIDADE C 
@@ -31,12 +31,16 @@ if($acao == "select"){
                     ON F.ID_PLANO = P.ID_PLANO
                 LEFT JOIN COMORBIDADE CM
                     ON F.ID_COMORBIDADE = CM.ID_COMORBIDADE
-                    WHERE ID_USUARIO = ?" . $verifca_contato;
+                    WHERE F.ID_USUARIO = ?" . $verifca_contato;
 
     $values = array($id_usuario);
 
-    if(!empty($id_contato))
+    if(!empty($id_contato)){
         array_push($values, $id_contato);
+
+        $sql_contato = "SELECT * FROM CONTATOS WHERE ID_CONTATO = ?";
+        $rs_contato = $con->fetch($sql_contato, array($id_contato));
+    }
 
     $rs = $con->fetch($sql, $values);
 
@@ -50,27 +54,29 @@ if($acao == "select"){
         "id_formulario" => $rs["ID_FORMULARIO"],
         "id_usuario" => $rs["ID_USUARIO"],
         "id_contato" => $rs["ID_CONTATO"],
+        "nm_contato" => $rs_contato ? $rs_contato["TIPO_CONTATO"] : "",
+        "cpf_contato" => $rs_contato ? $rs_contato["CPF"] : "",
         "dt_nascimento" => $dataFormatada,
-        "tp_sexo" => $rs["TP_SEXO"],
-        "cep" => $cepFormatado,
-        "endereco" => $rs["ENDERECO"],
-        "bairro" => $rs["BAIRRO"],
+        "tp_sexo"    => $rs["TP_SEXO"],
+        "cep"        => $cepFormatado,
+        "endereco"   => $rs["ENDERECO"],
+        "bairro"     => $rs["BAIRRO"],
         "complemento" => $rs["COMPLEMENTO"],
-        "id_cidade" => $rs["ID_CIDADE"],
+        "id_cidade"  => $rs["ID_CIDADE"],
         "lbl_cidade" => $rs["NOME_CIDADE"],
-        "telefone" => $telefoneFormatado,
-        "celular" => $celularFormatado,
-        "id_plano" => $rs["ID_PLANO"],
-        "lbl_plano" => $rs["NOME_PLANO"],
-        "ds_plano" => $rs["DS_PLANO"],
-        "alergia" => $rs["ALERGIA"],
+        "telefone"   => $telefoneFormatado,
+        "celular"    => $celularFormatado,
+        "id_plano"   => $rs["ID_PLANO"],
+        "lbl_plano"  => $rs["NOME_PLANO"],
+        "ds_plano"   => $rs["DS_PLANO"],
+        "alergia"    => $rs["ALERGIA"],
         "ds_alergia" => $rs["DS_ALERGIA"],
-        "id_comorbidade" => $rs["ID_COMORBIDADE"],
+        "id_comorbidade"  => $rs["ID_COMORBIDADE"],
         "lbl_comorbidade" => $rs["NOME_COMORBIDADE"],
-        "ds_comorbidade" => $rs["DS_COMORBIDADE"],
-        "med_cont" => $rs["MEDICAMENTO_CONTINUO"],
+        "ds_comorbidade"  => $rs["DS_COMORBIDADE"],
+        "med_cont"    => $rs["MEDICAMENTO_CONTINUO"],
         "ds_med_cont" => $rs["DS_MEDICAMENTO_CONTINUO"],
-        "cirurgia" => $rs["CIRURGIA"],
+        "cirurgia"    => $rs["CIRURGIA"],
         "ds_cirurgia" => $rs["DS_CIRURGIA"]
     );
 } else if($acao == "contatos"){
