@@ -27,8 +27,9 @@ if(!empty($dados->nm_contato)){
     }
 
     if(!$contato_existe) {
-        $sql_count = "SELECT ID_CONTATO FROM CONTATOS";
-        $id_contato = $con->count($sql_count) + 1;
+        $sql_count = "SELECT ID_CONTATO FROM CONTATOS ORDER BY ID_CONTATO DESC";
+        $rs = $con->fetch($sql_count);
+        $id_contato = $rs['ID_CONTATO'] + 1;
 
         $sql = "INSERT INTO CONTATOS(ID_CONTATO, TIPO_CONTATO, ID_USUARIO, CPF)
                     VALUES
