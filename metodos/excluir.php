@@ -4,7 +4,7 @@ include_once("../includes/auth.php");
 $id_usuario = $decoded_array['id_usuario'];
 $id_contato = null;
 
-$tabelas = array('FORMULARIO', 'LOCALIDADE', 'CONTATOS');
+$tabelas = array('FORMULARIO', 'CONTATOS');
 
 if(!empty($_GET['id_contato'])){
     $id_contato = $_GET['id_contato'];
