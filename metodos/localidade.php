@@ -16,15 +16,14 @@ if (verificarPropriedades($dados, $propriedades)) {
     $latitude = $dados->latitude;
     $longitude = $dados->longitude;
     $dthr = date('Y/m/d H:i:s', time());
-    $id_contato = isset($dados->id_contato) ? $dados->id_contato : null;
 } else {
     retorna_erro("Informe todas as propriedades necessárias: latitude e longitude.", 400);
 }
 
-$sql = "INSERT INTO LOCALIDADE(LATITUDE, LONGITUDE, DTHR_LOCALIDADE, ID_USUARIO, ID_CONTATO)
-            VALUES (?, ?, ?, ?, ?)";
+$sql = "INSERT INTO LOCALIDADE(LATITUDE, LONGITUDE, DTHR_LOCALIDADE, ID_USUARIO)
+            VALUES (?, ?, ?, ?)";
 
-$values = array($latitude, $longitude, $dthr, $id_usuario, $id_contato);
+$values = array($latitude, $longitude, $dthr, $id_usuario);
 
 $stmt = $con->insert($sql, $values);
 
