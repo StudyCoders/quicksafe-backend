@@ -20,12 +20,12 @@ if (verificarPropriedades($dados, $propriedades)) {
     retorna_erro("Informe todas as propriedades necessárias: email e senha.", 400);
 }
 
-$sql = "SELECT * FROM USUARIO WHERE EMAIL = ?  AND ATIVO = 'S'"; 
+$sql = "SELECT * FROM USUARIO WHERE EMAIL = ?  AND ATIVO = 'S'";
 $values = array($email);
 
 $count = $con->count($sql, $values);
 
-if($count > 0){
+if ($count > 0) {
     $data = $con->fetch($sql, $values);
     $email_banco = $data['EMAIL'];
     $senha_banco = $data['SENHA'];
@@ -34,38 +34,28 @@ if($count > 0){
     // jwt válido para 30 dias (60 segundos * 60 minutos * 24 horas * 30 dias)
     $expirationTime = $issuedAt + 60 * 60 * 24 * 30;
 
-    if(password_verify($senha, $senha_banco)){
-        $existe_form = false;
+    if (password_verify($senha, $senha_banco)) {
         $id_usuario = $data['ID_USUARIO'];
         $nome = $data['NOME_COMPLETO'];
         $email = $data['EMAIL'];
         $cpf = maskCpf($data['CPF']);
 
-        $sql = "SELECT * FROM FORMULARIO AS F WHERE F.ID_USUARIO = ?";
-
-        $count = $con->count($sql, array($id_usuario));
-
-        if($count > 0){
-            $existe_form = true;
-        }
-        
         $payload = [
             'id_usuario' => $id_usuario,
             'email' => $email,
             'nome' => $nome,
             'cpf'  => $cpf,
-            'existe_form' => $existe_form,
+            'existe_form' => existeFormulario($con, $id_usuario),
             'iat' => $issuedAt,
             'exp' => $expirationTime
         ];
-                
+
         $jwt = FirebaseJWT::encode($payload, $API_SECRET, 'HS256');
 
-        die(json_encode(array("msg" => "Entrando no aplicativo!", "token" =>  $jwt )));
-    }else{
+        die(json_encode(array("msg" => "Entrando no aplicativo!", "token" =>  $jwt)));
+    } else {
         retorna_erro("Senha incorreta", 401);
     }
-
-}else{
+} else {
     retorna_erro("Usuário não encontrado", 403);
 }

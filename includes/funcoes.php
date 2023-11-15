@@ -63,6 +63,14 @@ function verificarTokenBloqueado($con, $token)
 	}
 }
 
+function existeFormulario($con, $id_usuario) {
+	$query = "SELECT * FROM FORMULARIO AS F WHERE F.ID_USUARIO = ?";
+	
+	$count = $con->count($query, array($id_usuario));
+
+	return $count > 0;
+}
+
 function verificarPropriedades($dados, $propriedades){
 	foreach($propriedades as $prop){
 		if(!property_exists($dados, $prop)){
