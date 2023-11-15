@@ -2,7 +2,7 @@
 
 ## Introdução
 
-Bem-vindo à documentação do backend do projeto QuickSafe. Este backend é uma parte essencial da solução "Localização em Tempo Real para Situações de Perigo".
+Bem-vindo à documentação do backend do projeto QuickSafe. Este backend é uma parte essencial da solução "Compartilhe Sua Localização em Casos de Emergência".
 
 ## Tecnologias Utilizadas
 
