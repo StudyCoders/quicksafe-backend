@@ -167,9 +167,9 @@ if ($acao == 'select') {
         "comorbidade"   => $rs["ID_COMORBIDADE"] == 21 ? $rs["DS_COMORBIDADE"] : $rs["NOME_COMORBIDADE"],
         "med_continuo"  => concatTxt($rs["MEDICAMENTO_CONTINUO"], $rs["DS_MEDICAMENTO_CONTINUO"]),
         "cirurgia"      => concatTxt($rs["CIRURGIA"], $rs["DS_CIRURGIA"]),
-        "LATITUDE"      => $rs_localidade['LATITUDE'],
-        "LONGITUDE"     => $rs_localidade['LONGITUDE'],
-        "DTHR_LOCAL"    => $rs_localidade['DTHR_LOCALIDADE']
+        "latitude"      => $rs_localidade['LATITUDE'],
+        "longitude"     => $rs_localidade['LONGITUDE'],
+        "dthr_local"    => $rs_localidade['DTHR_LOCALIDADE']
     );
 }
 
