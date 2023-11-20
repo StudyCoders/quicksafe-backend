@@ -71,6 +71,11 @@ if ($acao == 'select') {
     $tipo = $dados->tipo;
     $codigo = $dados->codigo;
 
+    function concatTxt($tipo = "", $descricao = "")
+    {
+        return $tipo == "S" ? "Sim, " . $descricao : "Não.";
+    }
+
     if ($tipo == "C") {
         $sql = "SELECT
                     F.*,
@@ -123,45 +128,49 @@ if ($acao == 'select') {
                   AND F.ID_CONTATO IS NULL";
     }
 
-    $rs = $con->fetchAll($sql, array($codigo));
+    $rs = $con->fetch($sql, array($codigo));
 
-    function concatTxt($tipo = "", $descricao = "")
-    {
-        return $tipo == "S" ? "Sim, " . $descricao : "Não.";
-    }
+    $sql_localidade = "SELECT DATE_FORMAT(DTHR_LOCALIDADE, '%d/%m/%Y %H:%i:%S') AS DTHR_LOCALIDADE,
+                              LATITUDE,
+                              LONGITUDE
+                        FROM LOCALIDADE
+                           WHERE ID_USUARIO = ?
+                        ORDER BY DTHR_LOCALIDADE DESC LIMIT 1";
+    $rs_localidade = $con->fetch($sql_localidade, array($rs['ID_USUARIO']));
 
-    foreach ($rs as $key => $v) {
-        $dataFormatada = date('d/m/Y', strtotime($v["DT_NASCIMENTO"]));
-        $telefoneFormatado = !empty($v["TELEFONE"]) ? sprintf('(%s) %s-%s', substr($v["TELEFONE"], 0, 2), substr($v["TELEFONE"], 2, 4), substr($v["TELEFONE"], 6))
-            : "-";
-        $celularFormatado = sprintf('(%s) %s-%s', substr($v["CELULAR"], 0, 2), substr($v["CELULAR"], 2, 5), substr($v["CELULAR"], 7));
-        $cepFormatado = substr($v["CEP"], 0, 5) . '-' . substr($v["CEP"], 5);
+    $dataFormatada = date('d/m/Y', strtotime($rs["DT_NASCIMENTO"]));
+    $telefoneFormatado = !empty($rs["TELEFONE"]) ? sprintf('(%s) %s-%s', substr($rs["TELEFONE"], 0, 2), substr($rs["TELEFONE"], 2, 4), substr($rs["TELEFONE"], 6))
+        : "-";
+    $celularFormatado = sprintf('(%s) %s-%s', substr($rs["CELULAR"], 0, 2), substr($rs["CELULAR"], 2, 5), substr($rs["CELULAR"], 7));
+    $cepFormatado = substr($rs["CEP"], 0, 5) . '-' . substr($rs["CEP"], 5);
 
-        $retorno[] = array(
-            "id_formulario" => $v["ID_FORMULARIO"],
-            "id_usuario"    => $v["ID_USUARIO"],
-            "nome_usuario"  => $v["NOME_COMPLETO"],
-            "email_usuario" => $v["EMAIL"],
-            "cpf_usuario"   => maskCpf($v["CPF_USUARIO"]),
-            "id_contato"    => $v["ID_CONTATO"],
-            "nome_contato"  => $tipo == "C" ? $v["TIPO_CONTATO"] : "",
-            "cpf_contato"   => $tipo == "C" ? maskCpf($v["CPF_CONTATO"]) : "",
-            "dt_nascimento" => $dataFormatada,
-            "tp_sexo"       => $v["TP_SEXO"] == "M" ? "Masculino" : "Feminino",
-            "cep"           => $cepFormatado,
-            "endereco"      => $v["ENDERECO"],
-            "bairro"        => $v["BAIRRO"],
-            "complemento"   => $v["COMPLEMENTO"] ? $v["COMPLEMENTO"] : "-",
-            "nm_cidade"     => $v["NOME_CIDADE"],
-            "telefone"      => $telefoneFormatado,
-            "celular"       => $celularFormatado,
-            "plano_saude"   => $v["ID_PLANO"] == 8 ? $v["DS_PLANO"] : $v["ID_PLANO"],
-            "alergia"       => concatTxt($v["ALERGIA"], $v["DS_ALERGIA"]),
-            "comorbidade"   => $v["ID_COMORBIDADE"] == 21 ? $v["DS_COMORBIDADE"] : $v["NOME_COMORBIDADE"],
-            "med_continuo"  => concatTxt($v["MEDICAMENTO_CONTINUO"], $v["DS_MEDICAMENTO_CONTINUO"]),
-            "cirurgia"      => concatTxt($v["CIRURGIA"], $v["DS_CIRURGIA"]),
-        );
-    }
+    $retorno[] = array(
+        "id_formulario" => $rs["ID_FORMULARIO"],
+        "id_usuario"    => $rs["ID_USUARIO"],
+        "nome_usuario"  => $rs["NOME_COMPLETO"],
+        "email_usuario" => $rs["EMAIL"],
+        "cpf_usuario"   => maskCpf($rs["CPF_USUARIO"]),
+        "id_contato"    => $rs["ID_CONTATO"],
+        "nome_contato"  => $tipo == "C" ? $rs["TIPO_CONTATO"] : "",
+        "cpf_contato"   => $tipo == "C" ? maskCpf($rs["CPF_CONTATO"]) : "",
+        "dt_nascimento" => $dataFormatada,
+        "tp_sexo"       => $rs["TP_SEXO"] == "M" ? "Masculino" : "Feminino",
+        "cep"           => $cepFormatado,
+        "endereco"      => $rs["ENDERECO"],
+        "bairro"        => $rs["BAIRRO"],
+        "complemento"   => $rs["COMPLEMENTO"] ? $rs["COMPLEMENTO"] : "-",
+        "nm_cidade"     => $rs["NOME_CIDADE"],
+        "telefone"      => $telefoneFormatado,
+        "celular"       => $celularFormatado,
+        "plano_saude"   => $rs["ID_PLANO"] == 8 ? $rs["DS_PLANO"] : $rs["ID_PLANO"],
+        "alergia"       => concatTxt($rs["ALERGIA"], $rs["DS_ALERGIA"]),
+        "comorbidade"   => $rs["ID_COMORBIDADE"] == 21 ? $rs["DS_COMORBIDADE"] : $rs["NOME_COMORBIDADE"],
+        "med_continuo"  => concatTxt($rs["MEDICAMENTO_CONTINUO"], $rs["DS_MEDICAMENTO_CONTINUO"]),
+        "cirurgia"      => concatTxt($rs["CIRURGIA"], $rs["DS_CIRURGIA"]),
+        "LATITUDE"      => $rs_localidade['LATITUDE'],
+        "LONGITUDE"     => $rs_localidade['LONGITUDE'],
+        "DTHR_LOCAL"    => $rs_localidade['DTHR_LOCALIDADE']
+    );
 }
 
 die(json_encode($retorno));
