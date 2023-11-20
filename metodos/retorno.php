@@ -4,7 +4,7 @@ include_once("../includes/auth.php");
 $acao = $_GET["acao"];
 $retorno = array();
 
-if($acao == "select"){
+if ($acao == "select") {
     $queries = array(
         "cidade" => "SELECT C.ID_CIDADE AS value, C.NOME_CIDADE AS label FROM CIDADE C ORDER BY ID_CIDADE",
         "comorbidade" => "SELECT C.ID_COMORBIDADE AS value, C.NOME_COMORBIDADE AS label FROM COMORBIDADE C ORDER BY ID_COMORBIDADE",
@@ -15,8 +15,7 @@ if($acao == "select"){
         $rs = $con->fetchAll($query);
         $retorno[$key] = $rs;
     }
-
-} else if($acao == "formulario"){
+} else if ($acao == "formulario") {
     $dados = json_decode(file_get_contents('php://input'));
 
     $id_contato = !empty($_GET["id_contato"]) ? $_GET["id_contato"] : "";
@@ -35,7 +34,7 @@ if($acao == "select"){
 
     $values = array($id_usuario);
 
-    if(!empty($id_contato)){
+    if (!empty($id_contato)) {
         array_push($values, $id_contato);
 
         $sql_contato = "SELECT * FROM CONTATOS WHERE ID_CONTATO = ?";
@@ -46,7 +45,7 @@ if($acao == "select"){
 
     $dataFormatada = date('d/m/Y', strtotime($rs["DT_NASCIMENTO"]));
     $telefoneFormatado = !empty($rs["TELEFONE"]) ? sprintf('(%s) %s-%s', substr($rs["TELEFONE"], 0, 2), substr($rs["TELEFONE"], 2, 4), substr($rs["TELEFONE"], 6))
-                            : "";
+        : "";
     $celularFormatado = sprintf('(%s) %s-%s', substr($rs["CELULAR"], 0, 2), substr($rs["CELULAR"], 2, 5), substr($rs["CELULAR"], 7));
     $cepFormatado = substr($rs["CEP"], 0, 5) . '-' . substr($rs["CEP"], 5);
 
@@ -79,7 +78,7 @@ if($acao == "select"){
         "cirurgia"    => $rs["CIRURGIA"],
         "ds_cirurgia" => $rs["DS_CIRURGIA"]
     );
-} else if($acao == "contatos"){
+} else if ($acao == "contatos") {
     $id_usuario = $decoded_array['id_usuario'];
 
     $sql = "SELECT * FROM CONTATOS WHERE ID_USUARIO = ?";
@@ -95,4 +94,3 @@ if($acao == "select"){
 }
 
 die(json_encode($retorno));
-?>

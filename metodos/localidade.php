@@ -28,4 +28,3 @@ $values = array($latitude, $longitude, $dthr, $id_usuario);
 $stmt = $con->insert($sql, $values);
 
 die(json_encode(array("msg" => "Localidade salva com sucesso")));
-?>

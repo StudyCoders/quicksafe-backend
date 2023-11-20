@@ -23,11 +23,11 @@ $sql = "SELECT * FROM USUARIO WHERE EMAIL = ?  AND ATIVO = 'S'";
 $values = array($email);
 $count = $con->count($sql, $values);
 
-if($count === 0){
+if ($count === 0) {
     $sql_count = "SELECT * FROM USUARIO WHERE EMAIL = ? AND ATIVO = 'N'";
     $count = $con->count($sql_count, array($email));
 
-    if($count === 0){
+    if ($count === 0) {
         $sql = "INSERT INTO USUARIO(NOME_COMPLETO, EMAIL, CPF, SENHA)
                     VALUES
                 (?, ?, ?, ?)";
@@ -35,15 +35,13 @@ if($count === 0){
         $stmt = $con->insert($sql, $values);
 
         die(json_encode(array("msg" => "Usuario salvo com sucesso")));
-    }else{
+    } else {
         $sql = "UPDATE USUARIO SET ATIVO = 'S'
                   WHERE EMAIL = ?";
         $stmt = $con->update($sql, array($email));
 
         die(json_encode(array("msg" => "Usuario reativado com sucesso")));
     }
-
-}else{
+} else {
     retorna_erro("E-mail já existente", 400);
 }
-?>
