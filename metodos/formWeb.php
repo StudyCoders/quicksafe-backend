@@ -144,7 +144,7 @@ if ($acao == 'select') {
     $celularFormatado = sprintf('(%s) %s-%s', substr($rs["CELULAR"], 0, 2), substr($rs["CELULAR"], 2, 5), substr($rs["CELULAR"], 7));
     $cepFormatado = substr($rs["CEP"], 0, 5) . '-' . substr($rs["CEP"], 5);
 
-    $retorno[] = array(
+    $retorno = array(
         "id_formulario" => $rs["ID_FORMULARIO"],
         "id_usuario"    => $rs["ID_USUARIO"],
         "nome_usuario"  => $rs["NOME_COMPLETO"],
