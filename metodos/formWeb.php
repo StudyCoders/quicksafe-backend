@@ -163,7 +163,7 @@ if ($acao == 'select') {
         "cidade"        => $rs["NOME_CIDADE"],
         "telefone"      => $telefoneFormatado,
         "celular"       => $celularFormatado,
-        "plano_saude"   => $rs["ID_PLANO"] == 8 ? $rs["DS_PLANO"] : $rs["ID_PLANO"],
+        "plano_saude"   => $rs["ID_PLANO"] == 8 ? $rs["DS_PLANO"] : $rs["NOME_PLANO"],
         "alergia"       => concatTxt($rs["ALERGIA"], $rs["DS_ALERGIA"]),
         "comorbidade"   => $rs["ID_COMORBIDADE"] == 21 ? $rs["DS_COMORBIDADE"] : $rs["NOME_COMORBIDADE"],
         "med_continuo"  => concatTxt($rs["MEDICAMENTO_CONTINUO"], $rs["DS_MEDICAMENTO_CONTINUO"]),
